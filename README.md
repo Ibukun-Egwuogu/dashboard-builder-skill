@@ -47,6 +47,7 @@ Every blueprint is designed to score well on all six review dimensions:
 ### Option 1 — Use the Web App (no install needed)
 
 Go to **https://ibukunegwu.github.io/dashboard-builder-skill/**
+You will need a free Anthropic API key to use the builder. Get one at [platform.anthropic.com](https://platform.anthropic.com) — it takes 2 minutes and comes with free credits.
 
 Answer five questions, get a full blueprint — ready to take into Power BI, Tableau, or any tool.
 
