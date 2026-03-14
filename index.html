@@ -512,7 +512,7 @@ async function buildBlueprint(){
   if(window._uploadedFile){try{const t=await window._uploadedFile.text();fc='\n\nUploaded dataset preview:\n'+t.split('\n').slice(0,6).join('\n');}catch(e){}}
   const msg=`Industry: ${industry}\nSkill level: ${level}\nAudience: ${audience}\nBusiness question: ${question}\nData source: ${datasource||'Not specified — recommend best public source'}${fc}`;
   try{
-    const resp=await fetch('https://dashboard-builder-api.vercel.app/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:SYSTEM,messages:[{role:'user',content:msg}]})});
+    const resp=await fetch('https://dashboard-builder-api.vercel.app/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:SYSTEM,messages:[{role:'user',content:msg}]})});
     const data=await resp.json();
    if(data.error){
   throw new Error(typeof data.error==='object'?data.error.message:data.error);
