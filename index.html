@@ -503,6 +503,7 @@ Produce a complete dashboard blueprint for a 100/100 dashboard across 6 dimensio
 If dataset columns/sample data are provided, base your KPI recommendations specifically on those fields.
 Return ONLY valid JSON (no markdown, no preamble) with this schema:
 {"title":"","audience_summary":"","core_question":"","kpis":[{"metric":"","definition":"","comparison":"","source":"","unit":""}],"layout":"","charts":[{"type":"","data":"","title":"","notes":""}],"colour_system":[{"colour":"","hex":"","means":""}],"data_requirements":[{"metric":"","source":"","grain":"","refresh":""}],"interactivity":"","live_api":{"name":"","url":"","why":"","sample_call":""},"checklist":[{"item":"","status":"PASS","note":""}],"anti_patterns_avoided":[]}
+CRITICAL JSON RULES: No trailing commas. No newlines inside string values — use a space instead. No special characters in strings. All strings must use double quotes. Return nothing except the JSON object.
 Include 6+ KPIs, 5+ charts, 4+ colour meanings, 12+ checklist items. Be specific and concrete.`;
 
 async function buildBlueprint(){
