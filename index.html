@@ -523,7 +523,30 @@ async function buildBlueprint(){
 const firstBrace=cleanRaw.indexOf('{');
 const lastBrace=cleanRaw.lastIndexOf('}');
 if(firstBrace>-1&&lastBrace>-1){cleanRaw=cleanRaw.slice(firstBrace,lastBrace+1);}
-const bp=JSON.parse(cleanRaw);
+cleanRaw=cleanRaw
+  .replace(/[\r\n\t]/g,' ')
+  .replace(/,\s*}/g,'}')
+  .replace(/,\s*]/g,']')
+  .replace(/([^\\])"([^"]*)\n([^"]*)"([,}\]])/g,'$1"$2 $3"$4')
+  .replace(/\\'/g,"'");
+let bp;
+try{
+  bp=JSON.parse(cleanRaw);
+}catch(e){
+  try{
+    let truncated=cleanRaw;
+    let opens=(truncated.match(/\[/g)||[]).length-(truncated.match(/\]/g)||[]).length;
+    let openb=(truncated.match(/\{/g)||[]).length-(truncated.match(/\}/g)||[]).length;
+    if(opens>0)truncated+=']'.repeat(opens);
+    if(openb>0)truncated+='}}'.repeat(openb);
+    truncated=truncated
+      .replace(/,\s*}/g,'}')
+      .replace(/,\s*]/g,']');
+    bp=JSON.parse(truncated);
+  }catch(e2){
+    throw new Error('Blueprint generated but could not be parsed. Please try again — this happens occasionally with complex datasets.');
+  }
+}
     renderBlueprint(bp);
     document.getElementById('outputStatus').textContent='Blueprint ready';
   document.getElementById('dlBtn').style.display='inline-flex';
