@@ -512,12 +512,18 @@ async function buildBlueprint(){
   if(window._uploadedFile){try{const t=await window._uploadedFile.text();fc='\n\nUploaded dataset preview:\n'+t.split('\n').slice(0,6).join('\n');}catch(e){}}
   const msg=`Industry: ${industry}\nSkill level: ${level}\nAudience: ${audience}\nBusiness question: ${question}\nData source: ${datasource||'Not specified — recommend best public source'}${fc}`;
   try{
-    const resp=await fetch('https://dashboard-builder-api.vercel.app/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYSTEM,messages:[{role:'user',content:msg}]})});
+    const resp=await fetch('https://dashboard-builder-api.vercel.app/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:SYSTEM,messages:[{role:'user',content:msg}]})});
     const data=await resp.json();
-    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-    const bp=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    renderBlueprint(bp);
-    document.getElementById('outputStatus').textContent='Blueprint ready';
+   if(data.error){
+  throw new Error(typeof data.error==='object'?data.error.message:data.error);
+}
+if(!data.content){
+  throw new Error('Unexpected response from server. Check Vercel logs.');
+}
+const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+const bp=JSON.parse(raw.replace(/```json|```/g,'').trim());
+renderBlueprint(bp);
+document.getElementById('outputStatus').textContent='Blueprint ready';
   }catch(e){
     document.getElementById('output').innerHTML=`<div style="background:var(--danger-bg);border:1px solid #fca5a5;border-radius:8px;padding:1rem;font-size:13px;color:var(--danger)">Error: ${e.message}. Please try again.</div>`;
     document.getElementById('outputStatus').textContent='Error';
