@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Blueprint Builder · Ibukun Egwuogu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#05132b;--navy-mid:#0a2044;--navy-light:#102d5e;--blue:#1a6fd4;--blue-bright:#2d8ef5;--blue-glow:#4aa8ff;--blue-pale:#e8f2fd;--blue-mist:#c8dffa;--teal:#0ec4c4;--white:#ffffff;--off-white:#f5f8fc;--text:#0d1f3c;--text-mid:#3a5580;--text-muted:#6b82a0;--border:rgba(26,111,212,0.15);--border-strong:rgba(26,111,212,0.3);--success:#0e9a5f;--success-bg:#e6f7f1;--warn:#c47a00;--warn-bg:#fdf4e3;--danger:#c0392b;--danger-bg:#fef0f0;--radius:12px;--radius-sm:8px;--shadow:0 4px 24px rgba(5,19,43,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:var(--text);font-size:15px;line-height:1.65;overflow-x:hidden}
+header{background:var(--navy);padding:0 2rem;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.06)}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:17px;color:var(--white);letter-spacing:-0.3px}
+.logo span{color:var(--blue-glow)}
+.header-nav{display:flex;align-items:center;gap:20px}
+.header-nav a{font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.15s}
+.header-nav a:hover{color:var(--white)}
+.nav-cta{background:rgba(45,142,245,0.15);color:var(--blue-glow)!important;padding:6px 14px;border-radius:20px;border:1px solid rgba(45,142,245,0.3);font-weight:500}
+.nav-cta:hover{background:rgba(45,142,245,0.28)!important;color:var(--white)!important}
+.hero{background:var(--navy);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(45,142,245,0.18) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(74,168,255,0.4),transparent)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(45,142,245,0.12);border:1px solid rgba(45,142,245,0.25);color:var(--blue-glow);font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:1.5rem}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(26px,5vw,46px);font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:1.2rem;max-width:680px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--blue-glow)}
+.hero-sub{font-size:15px;color:rgba(255,255,255,0.5);max-width:500px;margin:0 auto 2rem;font-weight:300;line-height:1.7}
+.tool-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tool-pill{font-size:12px;font-weight:500;color:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.1);padding:4px 12px;border-radius:20px}
+.page-tabs{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:58px;z-index:90}
+.page-tabs-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:flex}
+.page-tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap}
+.page-tab:hover{color:var(--text)}
+.page-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.page-content{display:none}
+.page-content.active{display:block}
+.main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem;display:grid;grid-template-columns:420px 1fr;gap:1.5rem;align-items:start}
+.form-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;position:sticky;top:110px}
+.form-header{background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));padding:1.2rem 1.5rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.form-header-icon{width:32px;height:32px;background:rgba(45,142,245,0.2);border:1px solid rgba(45,142,245,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.form-header-icon svg{width:16px;height:16px;stroke:var(--blue-glow);fill:none;stroke-width:2}
+.form-header-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--white)}
+.form-header-sub{font-size:12px;color:rgba(255,255,255,0.4)}
+.form-body{padding:1.5rem}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);margin-bottom:6px}
+.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--off-white);transition:border-color 0.15s,background 0.15s;-webkit-appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b82a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer}
+.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(26,111,212,0.1)}
+.field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upload-gate{background:var(--off-white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:1.1rem}
+.gate-label{font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);margin-bottom:10px}
+.privacy-check{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;cursor:pointer}
+.privacy-check input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
+.privacy-check-text{font-size:12px;color:var(--text-muted);line-height:1.5}
+.privacy-check-text strong{color:var(--text)}
+.upload-area{display:none;border:1.5px dashed var(--border-strong);border-radius:var(--radius-sm);padding:16px;text-align:center;cursor:pointer;transition:border-color 0.15s,background 0.15s;background:var(--white)}
+.upload-area.enabled{display:block}
+.upload-area:hover{border-color:var(--blue);background:var(--blue-pale)}
+.upload-area input[type=file]{display:none}
+.upload-icon{font-size:22px;margin-bottom:6px}
+.upload-text{font-size:12px;color:var(--text-muted)}
+.upload-text strong{color:var(--blue)}
+.upload-text span{display:block;font-size:11px;margin-top:2px}
+.file-attached{display:none;align-items:center;gap:8px;background:var(--success-bg);border:1px solid rgba(14,154,95,0.2);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;color:var(--success)}
+.file-attached.show{display:flex}
+.file-remove{margin-left:auto;cursor:pointer;color:var(--text-muted);font-size:18px;line-height:1}
+.build-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:var(--white);border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:0.02em;cursor:pointer;transition:opacity 0.15s,transform 0.1s;margin-top:0.4rem;position:relative;overflow:hidden}
+.build-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,0.1),transparent)}
+.build-btn:hover:not(:disabled){opacity:.92;transform:translateY(-1px)}
+.build-btn:disabled{opacity:.5;cursor:not-allowed}
+.clear-btn{width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-muted);font-family:'DM Sans',sans-serif;cursor:pointer}
+.clear-btn:hover{background:var(--off-white)}
+.dim-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:1.2rem 1.5rem;background:var(--off-white);border-top:1px solid var(--border)}
+.dim-pill{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px}
+.dim-num{font-size:10px;font-weight:700;letter-spacing:0.06em;color:var(--blue);text-transform:uppercase;margin-bottom:2px}
+.dim-name{font-size:11px;font-weight:600;color:var(--text);line-height:1.3}
+.dim-desc{font-size:10px;color:var(--text-muted);line-height:1.4;margin-top:2px}
+.output-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;min-height:500px;display:flex;flex-direction:column}
+.output-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.output-header-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.output-status{font-size:12px;color:var(--text-muted)}
+.output-body{padding:1.5rem;overflow-y:auto;max-height:80vh;flex:1}
+.empty-state{text-align:center;padding:4rem 2rem}
+.empty-icon{width:64px;height:64px;background:var(--blue-pale);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem}
+.empty-icon svg{width:28px;height:28px;stroke:var(--blue);fill:none;stroke-width:1.5}
+.empty-state h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px}
+.empty-state p{font-size:14px;color:var(--text-muted);max-width:360px;margin:0 auto 1.5rem;line-height:1.6}
+.api-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.api-pill{font-size:11px;font-weight:500;background:var(--blue-pale);color:var(--blue);border:1px solid var(--blue-mist);padding:4px 10px;border-radius:20px;text-decoration:none;cursor:pointer;transition:background 0.15s}
+.api-pill:hover{background:var(--blue-mist)}
+.loading-state{text-align:center;padding:4rem 2rem}
+.loader{width:36px;height:36px;border:3px solid var(--blue-pale);border-top-color:var(--blue);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state p{font-size:14px;color:var(--text-muted)}
+.loading-steps{display:flex;flex-direction:column;gap:6px;margin-top:1.2rem;max-width:280px;margin-left:auto;margin-right:auto}
+.loading-step{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)}
+.loading-dot{width:6px;height:6px;border-radius:50%;background:var(--blue-mist);flex-shrink:0}
+.loading-dot.active{background:var(--blue);animation:pulse 1.2s infinite}
+.blueprint{font-size:13.5px}
+.bp-header{background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));border-radius:var(--radius-sm);padding:1.4rem 1.5rem;margin-bottom:1.2rem}
+.bp-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:var(--white);letter-spacing:-0.3px;margin-bottom:6px}
+.bp-audience{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:10px}
+.bp-question{background:rgba(74,168,255,0.15);border:1px solid rgba(74,168,255,0.25);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--blue-glow);font-style:italic;line-height:1.5}
+.bp-section{margin-bottom:1.4rem}
+.bp-section-title{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.bp-section-title::before{content:'';width:3px;height:12px;background:var(--blue);border-radius:2px}
+.kpi-table,.data-table,.r-table{width:100%;border-collapse:collapse;font-size:12px}
+.kpi-table thead tr,.data-table thead tr,.r-table thead tr{background:var(--off-white)}
+.kpi-table th,.data-table th,.r-table th{padding:7px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border)}
+.kpi-table td,.data-table td,.r-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;line-height:1.4}
+.kpi-table tr:last-child td,.data-table tr:last-child td,.r-table tr:last-child td{border-bottom:none}
+.kpi-table tr:hover td,.data-table tr:hover td{background:var(--off-white)}
+.kpi-unit{font-family:monospace;font-size:11px;background:var(--blue-pale);color:var(--blue);padding:2px 6px;border-radius:4px}
+.layout-box{background:var(--navy);border-radius:var(--radius-sm);padding:14px 16px;font-family:monospace;font-size:12px;color:rgba(255,255,255,0.7);white-space:pre-wrap;line-height:1.7;border:1px solid rgba(255,255,255,0.06)}
+.chart-cards{display:flex;flex-direction:column;gap:8px}
+.chart-card{background:var(--off-white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;display:flex;align-items:flex-start;gap:10px}
+.chart-type-badge{background:var(--blue-pale);color:var(--blue);font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;border:1px solid var(--blue-mist);flex-shrink:0;margin-top:1px}
+.chart-info{flex:1}
+.chart-title{font-weight:600;font-size:13px;color:var(--text);margin-bottom:3px}
+.chart-data{font-size:12px;color:var(--text-muted)}
+.chart-note{font-size:11px;color:var(--text-muted);margin-top:3px;font-style:italic}
+.colour-chips{display:flex;flex-wrap:wrap;gap:8px}
+.colour-chip{display:flex;align-items:center;gap:7px;background:var(--off-white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;font-size:12px}
+.colour-swatch{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.refresh-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+.r-rt{background:var(--success-bg);color:var(--success)}
+.r-d{background:var(--blue-pale);color:var(--blue)}
+.r-w{background:var(--warn-bg);color:var(--warn)}
+.r-m{background:var(--danger-bg);color:var(--danger)}
+.api-box{background:linear-gradient(135deg,#e8f7f2,#eef6fd);border:1px solid rgba(14,154,95,0.2);border-radius:var(--radius-sm);padding:14px 16px}
+.api-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:var(--success);margin-bottom:4px}
+.api-why{font-size:13px;color:var(--text);margin-bottom:10px;line-height:1.5}
+.api-call{font-family:monospace;font-size:11px;background:var(--white);border:1px solid rgba(14,154,95,0.15);border-radius:6px;padding:8px 10px;color:var(--text-mid);word-break:break-all;margin-bottom:8px}
+.api-link{font-size:12px;color:var(--success);text-decoration:none;font-weight:500}
+.checklist{display:flex;flex-direction:column;gap:6px}
+.check-item{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;background:var(--off-white);border-radius:var(--radius-sm);font-size:12.5px}
+.check-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:1px}
+.ci-pass{background:var(--success-bg);color:var(--success)}
+.ci-warn{background:var(--warn-bg);color:var(--warn)}
+.ci-fail{background:var(--danger-bg);color:var(--danger)}
+.check-text{flex:1;color:var(--text);line-height:1.5}
+.check-note{color:var(--text-muted);font-style:italic;font-size:12px}
+.anti-list{display:flex;flex-direction:column;gap:5px}
+.anti-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-muted);padding:5px 0}
+.anti-x{color:#e74c3c;font-weight:700;font-size:13px;flex-shrink:0;margin-top:-1px}
+/* LIVE DATA PAGE */
+.live-page{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+.live-intro{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.live-intro-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.live-intro-body{font-size:13.5px;color:var(--text-muted);line-height:1.75;max-width:740px}
+.live-intro-body code{font-family:monospace;font-size:12px;background:var(--blue-pale);color:var(--blue);padding:2px 6px;border-radius:4px}
+.live-tabs{display:flex;gap:8px;margin-bottom:1.2rem;flex-wrap:wrap}
+.live-tab{padding:8px 18px;border-radius:20px;border:1px solid var(--border);font-size:13px;font-weight:500;cursor:pointer;background:var(--white);color:var(--text-muted);transition:all 0.15s}
+.live-tab.active{background:var(--blue-pale);color:var(--blue);border-color:var(--blue-mist)}
+.source-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.source-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.sc-header{padding:14px 16px;background:var(--off-white);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.sc-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sc-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.sc-sub{font-size:11px;color:var(--text-muted)}
+.sc-body{padding:14px 16px}
+.sc-desc{font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:10px}
+.sc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.sc-chip{font-size:11px;padding:3px 9px;background:var(--off-white);color:var(--text-muted);border-radius:20px;border:1px solid var(--border)}
+.sc-url{font-family:monospace;font-size:11px;background:var(--off-white);padding:6px 10px;border-radius:6px;color:var(--text-muted);margin-bottom:10px;word-break:break-all;border:1px solid var(--border)}
+.fetch-btn{padding:8px 16px;background:var(--white);border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--blue);transition:all 0.15s}
+.fetch-btn:hover:not(:disabled){background:var(--blue-pale);border-color:var(--blue)}
+.fetch-btn:disabled{opacity:.5;cursor:not-allowed}
+.result-box{margin-top:10px;background:var(--off-white);border-radius:var(--radius-sm);padding:12px;border:1px solid var(--border)}
+.result-label{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.raw-url{font-size:10px;font-family:monospace;color:var(--text-muted);margin-top:8px;word-break:break-all}
+.inline-loading{font-size:13px;color:var(--text-muted);padding:6px 0}
+.inline-err{font-size:12px;color:var(--danger);background:var(--danger-bg);padding:8px 10px;border-radius:6px;margin-top:8px;line-height:1.5}
+/* HOW TO PAGE */
+.howto-page{max-width:900px;margin:0 auto;padding:2.5rem 2rem}
+.howto-intro{font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:2rem;max-width:680px}
+.tool-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:1.2rem}
+.tool-header{padding:1rem 1.5rem;background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));display:flex;align-items:center;gap:12px}
+.tool-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(255,255,255,0.1)}
+.tool-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--white)}
+.tool-tagline{font-size:12px;color:rgba(255,255,255,0.45)}
+.tool-body{padding:1.5rem}
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--blue-pale);color:var(--blue);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body{flex:1;font-size:13.5px;color:var(--text);line-height:1.6}
+.step-body code{font-family:monospace;font-size:11px;background:var(--off-white);border:1px solid var(--border);padding:2px 6px;border-radius:4px;color:var(--text-mid);word-break:break-all}
+.step-body strong{color:var(--navy)}
+.tip-box{background:var(--blue-pale);border:1px solid var(--blue-mist);border-radius:var(--radius-sm);padding:10px 14px;font-size:12.5px;color:var(--text-mid);margin-top:1rem;line-height:1.6}
+.tip-box strong{color:var(--blue)}
+.code-block{background:var(--navy);border-radius:var(--radius-sm);padding:14px 16px;margin-top:1rem;font-family:monospace;font-size:12px;color:rgba(255,255,255,0.8);line-height:1.8;overflow-x:auto;white-space:pre}
+.code-comment{color:rgba(255,255,255,.35)}
+.code-kw{color:#f8c555}
+.code-str{color:#7ec8a0}
+.code-fn{color:#79b8ff}
+.dl-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-bright));color:var(--white);border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:opacity 0.15s;text-decoration:none;margin-top:1rem}
+.dl-btn:hover{opacity:.88}
+.dl-btn svg{width:14px;height:14px;stroke:var(--white);fill:none;stroke-width:2.5}
+footer{background:var(--navy);border-top:1px solid rgba(255,255,255,0.06);padding:1.8rem 2rem;text-align:center}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-line{font-size:13px;color:rgba(255,255,255,0.3);margin-bottom:4px}
+.footer-line a{color:rgba(255,255,255,0.5);text-decoration:none}
+.footer-line a:hover{color:var(--white)}
+@media(max-width:820px){.main{grid-template-columns:1fr}.form-panel{position:static}.source-grid{grid-template-columns:1fr}.field-row{grid-template-columns:1fr}.dim-strip{grid-template-columns:1fr 1fr}.page-tab{padding:12px 14px;font-size:12px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Dashboard <span>Blueprint Builder</span></div>
+    <nav class="header-nav">
+      <a href="https://github.com/Ibukun-Egwuogu/dashboard-builder-skill" target="_blank">GitHub</a>
+      <a href="https://david-abu.github.io/dashboard-review-skill/" target="_blank" class="nav-cta">Review a dashboard ↗</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:10px">by <strong style="color:rgba(255,255,255,0.65)">Ibukun Egwuogu</strong> · DataCamp Scholar</div><div class="hero-eyebrow">Proactive dashboard design</div>
+  <h1>Design a <em>100/100</em> dashboard blueprint<br>before you build it</h1>
+  <p class="hero-sub">Answer five questions. Get a complete blueprint — audience, KPIs, charts, layout, live data sources, and a quality checklist.</p>
+  <div class="tool-pills">
+    <span class="tool-pill">Power BI</span><span class="tool-pill">Tableau</span><span class="tool-pill">Looker</span><span class="tool-pill">Excel</span><span class="tool-pill">Google Data Studio</span><span class="tool-pill">Any tool</span>
+  </div>
+</section>
+
+<div class="page-tabs">
+  <div class="page-tabs-inner">
+    <div class="page-tab active" onclick="switchPage('builder')">Dashboard blueprint builder</div>
+    <div class="page-tab" onclick="switchPage('livedata')">Live data explorer</div>
+    <div class="page-tab" onclick="switchPage('howto')">How to connect data</div>
+  </div>
+</div>
+
+<!-- PAGE 1: BUILDER -->
+<div id="page-builder" class="page-content active">
+<div class="main">
+  <div class="form-panel">
+    <div class="form-header">
+      <div class="form-header-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+      <div><div class="form-header-title">Define your dashboard</div><div class="form-header-sub">Five inputs → one complete blueprint</div></div>
+    </div>
+    <div class="form-body">
+      <div class="field">
+        <label>Industry / domain</label>
+        <select id="industry">
+          <option value="">Select an industry...</option>
+          <option>Healthcare Analytics</option><option>Sales &amp; Retail Analytics</option>
+          <option>Finance &amp; Banking Analytics</option><option>Telecommunications Analytics</option>
+          <option>Logistics &amp; Supply Chain Analytics</option><option>E-commerce Analytics</option>
+          <option>Education Analytics</option><option>Energy &amp; Utilities Analytics</option>
+          <option>Transportation &amp; Mobility Analytics</option><option>Marketing &amp; Advertising Analytics</option>
+          <option>Agriculture &amp; Agribusiness Analytics</option><option>Real Estate Analytics</option>
+          <option>HR &amp; People Analytics</option><option>Sports Analytics</option>
+          <option>Social Impact / NGO Analytics</option><option>Government &amp; Public Policy Analytics</option>
+          <option>Other / Custom</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Skill level</label><select id="level"><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option></select></div>
+        <div class="field"><label>Audience</label><select id="audience"><option value="">Select...</option><option>C-Suite / Executive</option><option>Department Head</option><option>Operations Manager</option><option>Analyst / Data Team</option><option>Field / Frontline Worker</option><option>External Stakeholder</option><option>Portfolio / Showcase</option></select></div>
+      </div>
+      <div class="field"><label>Business question this dashboard answers</label><textarea id="question" placeholder="e.g. Which product categories are driving growth, and where are we losing margin?"></textarea></div>
+      <div class="field"><label>Preferred data source or tool</label><textarea id="datasource" rows="2" placeholder="e.g. Kaggle superstore dataset, live WHO API, internal SQL database..."></textarea></div>
+
+      <div class="upload-gate">
+        <div class="gate-label">Upload your dataset (optional)</div>
+        <label class="privacy-check">
+          <input type="checkbox" id="privacyCheck" onchange="toggleUpload()">
+          <span class="privacy-check-text"><strong>I confirm I am authorised to share this data.</strong> I have the right to upload this file and it does not contain personal or confidential information I am not permitted to share.</span>
+        </label>
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.json" onchange="handleFile(event)">
+          <div class="upload-icon">📂</div>
+          <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop<span>CSV, Excel, JSON — max 5MB</span></div>
+        </div>
+        <div class="file-attached" id="fileAttached">
+          <span id="fileName"></span>
+          <span class="file-remove" onclick="removeFile()">×</span>
+        </div>
+      </div>
+
+      <button class="build-btn" id="buildBtn" onclick="buildBlueprint()">Build my blueprint →</button>
+      <button class="clear-btn" onclick="clearAll()">Clear &amp; start over</button>
+    </div>
+    <div class="dim-strip">
+      <div class="dim-pill"><div class="dim-num">D1</div><div class="dim-name">What must this answer?</div><div class="dim-desc">One decision, not a topic.</div></div>
+      <div class="dim-pill"><div class="dim-num">D2</div><div class="dim-name">Are these the right metrics?</div><div class="dim-desc">No vanity stats, no missing ones.</div></div>
+      <div class="dim-pill"><div class="dim-num">D3</div><div class="dim-name">Will this audience use it?</div><div class="dim-desc">Right depth, right detail level.</div></div>
+      <div class="dim-pill"><div class="dim-num">D4</div><div class="dim-name">Do the numbers tell a story?</div><div class="dim-desc">Every KPI needs a comparison.</div></div>
+      <div class="dim-pill"><div class="dim-num">D5</div><div class="dim-name">Is every chart the right chart?</div><div class="dim-desc">No anti-patterns. Colour means something.</div></div>
+      <div class="dim-pill"><div class="dim-num">D6</div><div class="dim-name">What does the viewer do next?</div><div class="dim-desc">Every insight needs an action.</div></div>
+    </div>
+  </div>
+
+  <div class="output-panel">
+    <div class="output-header">
+      <div class="output-header-title">Your dashboard blueprint</div>
+      <div style="display:flex;align-items:center;gap:10px"><div class="output-status" id="outputStatus">Waiting for input</div><button class="dl-btn" id="dlBtn" style="display:none;padding:6px 12px;font-size:12px;margin:0" onclick="downloadBlueprint()"><svg viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>Download</button></div>
+    </div>
+    <div class="output-body">
+      <div id="output">
+        <div class="empty-state">
+          <div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+          <h3>Ready to build</h3>
+          <p>Fill in the form and click <strong>Build my blueprint</strong>. Your complete plan will appear here — ready for your BI tool.</p>
+          <div class="api-pills">
+            <span class="api-pill" onclick="switchPage('livedata')">Explore live data →</span>
+            <span class="api-pill" onclick="switchPage('howto')">How to connect APIs →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 2: LIVE DATA -->
+<div id="page-livedata" class="page-content">
+<div class="live-page">
+  <div class="live-intro">
+    <div class="live-intro-title">Why does an API URL look like gibberish?</div>
+    <div class="live-intro-body">
+      When you open a URL like <code>https://api.frankfurter.app/latest</code> in your browser, you see raw JSON — data in its machine-readable form. It's not broken. It's just not designed for human eyes. Think of it like the back of a restaurant kitchen: everything you need is there, but it needs a plate before it looks like food.<br><br>
+      Below you can see each API's live data rendered cleanly as a table. The <strong>How to connect data</strong> tab shows you exactly how to plug these URLs into Power BI, Tableau, or Python so your dashboard updates automatically.
+    </div>
+  </div>
+
+  <div class="live-tabs">
+    <div class="live-tab active" onclick="switchLiveTab('all')">All sources</div>
+    <div class="live-tab" onclick="switchLiveTab('health')">Health</div>
+    <div class="live-tab" onclick="switchLiveTab('finance')">Finance &amp; FX</div>
+    <div class="live-tab" onclick="switchLiveTab('climate')">Climate &amp; weather</div>
+    <div class="live-tab" onclick="switchLiveTab('economic')">Economic</div>
+  </div>
+
+  <div class="source-grid">
+    <div class="source-card" data-category="health">
+      <div class="sc-header"><div class="sc-icon" style="background:#fde8e8">🌍</div><div><div class="sc-title">WHO Global Health Observatory</div><div class="sc-sub">194 countries · Free · No API key needed</div></div></div>
+      <div class="sc-body">
+        <div class="sc-desc">Disease incidence, vaccination rates, maternal health, malaria burden — for every country, going back decades.</div>
+        <div class="sc-chips"><span class="sc-chip">Malaria dashboard</span><span class="sc-chip">Disease trends</span><span class="sc-chip">Health coverage</span></div>
+        <div class="sc-url">https://ghoapi.azureedge.net/api/MALARIA_EST_INCIDENCE</div>
+        <button class="fetch-btn" id="btn-who" onclick="fetchWHO()">Fetch live malaria data →</button>
+        <div id="res-who"></div>
+      </div>
+    </div>
+    <div class="source-card" data-category="finance">
+      <div class="sc-header"><div class="sc-icon" style="background:#e8f7f2">₦</div><div><div class="sc-title">Frankfurter Exchange Rates</div><div class="sc-sub">Daily FX rates · NGN, GBP, USD, EUR · Free · No API key needed</div></div></div>
+      <div class="sc-body">
+        <div class="sc-desc">Real-time currency exchange rates from the European Central Bank. Perfect for dashboards involving the Nigerian Naira or international pricing.</div>
+        <div class="sc-chips"><span class="sc-chip">NGN/USD tracker</span><span class="sc-chip">International pricing</span><span class="sc-chip">Logistics costs</span></div>
+        <div class="sc-url">https://api.frankfurter.app/latest?from=USD</div>
+        <button class="fetch-btn" id="btn-fx" onclick="fetchFX()">Fetch live exchange rates →</button>
+        <div id="res-fx"></div>
+      </div>
+    </div>
+    <div class="source-card" data-category="economic">
+      <div class="sc-header"><div class="sc-icon" style="background:#fdf4e3">🏦</div><div><div class="sc-title">World Bank Open Data</div><div class="sc-sub">GDP, poverty, trade · All countries · Free · No API key needed</div></div></div>
+      <div class="sc-body">
+        <div class="sc-desc">Decades of economic and development data for every country. Well-structured and clean — ideal for economic policy and public sector dashboards.</div>
+        <div class="sc-chips"><span class="sc-chip">Nigeria GDP</span><span class="sc-chip">Poverty analysis</span><span class="sc-chip">Development indicators</span></div>
+        <div class="sc-url">https://api.worldbank.org/v2/country/NG/indicator/NY.GDP.MKTP.CD?format=json&mrv=10</div>
+        <button class="fetch-btn" id="btn-wb" onclick="fetchWB()">Fetch Nigeria GDP data →</button>
+        <div id="res-wb"></div>
+      </div>
+    </div>
+    <div class="source-card" data-category="climate">
+      <div class="sc-header"><div class="sc-icon" style="background:var(--blue-pale)">🌤</div><div><div class="sc-title">Open-Meteo Weather API</div><div class="sc-sub">Historical &amp; forecast · Any location · Free · No API key needed</div></div></div>
+      <div class="sc-body">
+        <div class="sc-desc">Weather data for any coordinate on Earth, historical back to 1940. Essential for agriculture, energy, and logistics dashboards where weather drives outcomes.</div>
+        <div class="sc-chips"><span class="sc-chip">Crop yield vs rainfall</span><span class="sc-chip">Lagos weather</span><span class="sc-chip">Energy demand</span></div>
+        <div class="sc-url">https://api.open-meteo.com/v1/forecast?latitude=6.45&longitude=3.39&daily=temperature_2m_max,precipitation_sum&forecast_days=7</div>
+        <button class="fetch-btn" id="btn-wx" onclick="fetchWeather()">Fetch Lagos 7-day forecast →</button>
+        <div id="res-wx"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 3: HOW TO CONNECT -->
+<div id="page-howto" class="page-content">
+<div class="howto-page">
+  <p class="howto-intro">An API URL is just a live data pipe. You paste it into your BI tool and it pulls the data in as a table — automatically, on a schedule you control. Here's how to do it in each major tool.</p>
+
+  <div class="tool-section">
+    <div class="tool-header"><div class="tool-logo">📊</div><div><div class="tool-name">Power BI Desktop</div><div class="tool-tagline">Works with any JSON or CSV API — no plugin needed</div></div></div>
+    <div class="tool-body">
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div class="step-body">Open Power BI Desktop → <strong>Home</strong> → <strong>Get Data</strong> → <strong>Web</strong></div></div>
+        <div class="step"><span class="step-num">2</span><div class="step-body">Paste your API URL, e.g. <code>https://api.frankfurter.app/latest?from=USD&to=NGN,GBP,EUR</code> → click <strong>OK</strong></div></div>
+        <div class="step"><span class="step-num">3</span><div class="step-body">Power Query opens. Click into the <strong>rates</strong> record to expand it — you'll see NGN, GBP, EUR as columns.</div></div>
+        <div class="step"><span class="step-num">4</span><div class="step-body">Click <strong>Into Table</strong> → expand columns → rename them → <strong>Close &amp; Apply</strong>. Your live rates are now in your report.</div></div>
+        <div class="step"><span class="step-num">5</span><div class="step-body"><strong>To schedule refresh:</strong> Publish to Power BI Service → open your dataset → <strong>Settings</strong> → <strong>Scheduled refresh</strong> → set to Daily.</div></div>
+      </div>
+      <div class="tip-box"><strong>Tip:</strong> For the World Bank GDP API, add <code>?format=json&mrv=10&per_page=10</code> to get the last 10 years. Power Query will expand the nested JSON automatically.</div>
+    </div>
+  </div>
+
+  <div class="tool-section">
+    <div class="tool-header"><div class="tool-logo">📈</div><div><div class="tool-name">Tableau Desktop</div><div class="tool-tagline">Best with a Google Sheets middle layer for beginners</div></div></div>
+    <div class="tool-body">
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div class="step-body">For static snapshots: open the API URL in your browser → save the page as a <code>.json</code> file → connect via <strong>Connect → To a File → JSON</strong></div></div>
+        <div class="step"><span class="step-num">2</span><div class="step-body">For live data (easiest route): use Google Sheets as a middle layer — see the Google Sheets section below.</div></div>
+        <div class="step"><span class="step-num">3</span><div class="step-body">Connect Tableau to your Google Sheet via <strong>Connect → To a Server → Google Sheets</strong>. The Sheet auto-refreshes and Tableau picks up new data on each publish.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-section">
+    <div class="tool-header"><div class="tool-logo">📋</div><div><div class="tool-name">Google Sheets → Looker Studio</div><div class="tool-tagline">The most beginner-friendly live data setup</div></div></div>
+    <div class="tool-body">
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div class="step-body">Open a new Google Sheet → in cell A1 type: <code>=IMPORTDATA("https://api.frankfurter.app/latest?from=USD")</code>. The exchange rates load automatically.</div></div>
+        <div class="step"><span class="step-num">2</span><div class="step-body">Add column headers, clean up the data. Google Sheets auto-refreshes the <code>IMPORTDATA</code> formula every time the sheet is opened.</div></div>
+        <div class="step"><span class="step-num">3</span><div class="step-body">Open <strong>Looker Studio</strong> → <strong>Add data</strong> → <strong>Google Sheets</strong> → select your sheet. Done — your report now has live data.</div></div>
+        <div class="step"><span class="step-num">4</span><div class="step-body">For JSON APIs (like World Bank), use <strong>Extensions → Apps Script</strong> to write a small script that fetches the JSON and writes it to the sheet on a daily timer.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-section">
+    <div class="tool-header"><div class="tool-logo">🐍</div><div><div class="tool-name">Python → Power BI / Tableau</div><div class="tool-tagline">Most flexible — great for portfolio projects</div></div></div>
+    <div class="tool-body">
+      <div class="steps">
+        <div class="step"><span class="step-num">1</span><div class="step-body">Install the libraries: <code>pip install requests pandas openpyxl</code></div></div>
+        <div class="step"><span class="step-num">2</span><div class="step-body">Run the script below to pull the API and save as a CSV file.</div></div>
+        <div class="step"><span class="step-num">3</span><div class="step-body">In Power BI: <strong>Get Data → Text/CSV</strong> → point to your saved file. Every time you re-run the script, Power BI picks up the new data on the next refresh.</div></div>
+      </div>
+      <div class="code-block"><span class="code-comment"># Exchange rates → CSV</span>
+<span class="code-kw">import</span> requests, pandas <span class="code-kw">as</span> pd
+
+r = requests.<span class="code-fn">get</span>(<span class="code-str">"https://api.frankfurter.app/latest?from=USD"</span>)
+data = r.<span class="code-fn">json</span>()
+df = pd.<span class="code-fn">DataFrame</span>(data[<span class="code-str">'rates'</span>].items(), columns=[<span class="code-str">'Currency'</span>, <span class="code-str">'Rate'</span>])
+df[<span class="code-str">'Date'</span>] = data[<span class="code-str">'date'</span>]
+df.<span class="code-fn">to_csv</span>(<span class="code-str">"exchange_rates.csv"</span>, index=<span class="code-kw">False</span>)
+
+<span class="code-comment"># Nigeria GDP → CSV</span>
+r2 = requests.<span class="code-fn">get</span>(<span class="code-str">"https://api.worldbank.org/v2/country/NG/indicator/NY.GDP.MKTP.CD?format=json&mrv=15&per_page=15"</span>)
+gdp = r2.<span class="code-fn">json</span>()[1]
+df2 = pd.<span class="code-fn">DataFrame</span>([{<span class="code-str">'Year'</span>: x[<span class="code-str">'date'</span>], <span class="code-str">'GDP_USD'</span>: x[<span class="code-str">'value'</span>]} <span class="code-kw">for</span> x <span class="code-kw">in</span> gdp <span class="code-kw">if</span> x[<span class="code-str">'value'</span>]])
+df2.<span class="code-fn">to_csv</span>(<span class="code-str">"nigeria_gdp.csv"</span>, index=<span class="code-kw">False</span>)</div>
+      <div class="tip-box"><strong>Automate it:</strong> Schedule the script to run daily using Windows Task Scheduler (Windows) or cron (Mac/Linux). Your CSV updates every morning and Power BI refreshes from it automatically.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-line">Built by <a href="https://github.com/Ibukun-Egwuogu" target="_blank">Ibukun Egwuogu</a> · Data Analytics &amp; Business Intelligence</div>
+    <div class="footer-line">Companion to the <a href="https://david-abu.github.io/dashboard-review-skill/" target="_blank">Dashboard Review Skill</a> by David Abu · <a href="https://github.com/Ibukun-Egwuogu/dashboard-builder-skill" target="_blank">GitHub</a> · MIT License</div>
+  </div>
+</footer>
+
+<script>
+function switchPage(p){
+  document.querySelectorAll('.page-tab').forEach((t,i)=>t.classList.toggle('active',['builder','livedata','howto'][i]===p));
+  document.querySelectorAll('.page-content').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function switchLiveTab(cat){
+  document.querySelectorAll('.live-tab').forEach((t,i)=>t.classList.toggle('active',i===['all','health','finance','climate','economic'].indexOf(cat)));
+  document.querySelectorAll('.source-card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.category===cat)?'':'none';});
+}
+function toggleUpload(){
+  const ok=document.getElementById('privacyCheck').checked;
+  document.getElementById('uploadArea').classList.toggle('enabled',ok);
+  if(!ok)removeFile();
+}
+function handleFile(e){
+  const f=e.target.files[0];
+  if(!f)return;
+  if(f.size>5*1024*1024){alert('File too large — please keep it under 5MB.');return;}
+  document.getElementById('fileName').textContent=f.name+' ('+(f.size/1024).toFixed(0)+' KB)';
+  document.getElementById('fileAttached').classList.add('show');
+  document.getElementById('uploadArea').style.display='none';
+  window._uploadedFile=f;
+}
+function removeFile(){
+  document.getElementById('fileAttached').classList.remove('show');
+  document.getElementById('uploadArea').style.display='';
+  document.getElementById('fileInput').value='';
+  window._uploadedFile=null;
+}
+const ua=document.getElementById('uploadArea');
+ua.addEventListener('dragover',e=>{e.preventDefault();ua.style.borderColor='var(--blue)';});
+ua.addEventListener('dragleave',()=>{ua.style.borderColor='';});
+ua.addEventListener('drop',e=>{e.preventDefault();ua.style.borderColor='';const f=e.dataTransfer.files[0];if(f){document.getElementById('fileInput').files=e.dataTransfer.files;handleFile({target:{files:[f]}});}});
+
+const SYSTEM=`You are a senior data analyst and BI consultant helping someone design a dashboard from scratch.
+Produce a complete dashboard blueprint for a 100/100 dashboard across 6 dimensions: Business Question, Domain Knowledge, Audience Fit, Data Story, Visual Design, Actionability.
+If dataset columns/sample data are provided, base your KPI recommendations specifically on those fields.
+Return ONLY valid JSON (no markdown, no preamble) with this schema:
+{"title":"","audience_summary":"","core_question":"","kpis":[{"metric":"","definition":"","comparison":"","source":"","unit":""}],"layout":"","charts":[{"type":"","data":"","title":"","notes":""}],"colour_system":[{"colour":"","hex":"","means":""}],"data_requirements":[{"metric":"","source":"","grain":"","refresh":""}],"interactivity":"","live_api":{"name":"","url":"","why":"","sample_call":""},"checklist":[{"item":"","status":"PASS","note":""}],"anti_patterns_avoided":[]}
+Include exactly 5 kpis, 4 charts, 3 colour_system, 5 checklist, 3 anti_patterns_avoided.
+
+DATASET RULES - if a dataset preview is provided:
+- Only recommend charts supported by actual columns present.
+- No date/time column means NO line charts or time-series charts.
+- No previous period data means NO comparison KPIs like year-on-year or month-on-month.
+- Only include KPIs calculable from the actual columns shown.
+- Use real column names as data sources, not generic descriptions.
+
+ANCHOR FRAMING - apply to every blueprint:
+- Frame every KPI around: what decision will this make easier?
+- Frame actionability around: what does success look like 30 days after this goes live?
+- If the business question is vague, sharpen it into a specific decision in core_question.
+
+CRITICAL JSON: Every string under 12 words, no line breaks, no apostrophes. No trailing commas. Close all arrays and objects.`;
+
+async function buildBlueprint(){
+  const industry=document.getElementById('industry').value,level=document.getElementById('level').value,audience=document.getElementById('audience').value,question=document.getElementById('question').value.trim(),datasource=document.getElementById('datasource').value.trim();
+  if(!industry||!audience||!question){alert('Please fill in the industry, audience, and business question.');return;}
+  document.getElementById('buildBtn').disabled=true;
+  document.getElementById('outputStatus').textContent='Generating...';
+  document.getElementById('output').innerHTML='<div class="loading-state"><div class="loader"></div><p>Designing your dashboard blueprint...</p><div class="loading-steps"><div class="loading-step"><div class="loading-dot active"></div>Defining audience &amp; question</div><div class="loading-step"><div class="loading-dot"></div>Selecting domain-specific KPIs</div><div class="loading-step"><div class="loading-dot"></div>Specifying charts &amp; layout</div><div class="loading-step"><div class="loading-dot"></div>Running pre-build checklist</div></div></div>';
+  let fc='';
+  if(window._uploadedFile){try{const t=await window._uploadedFile.text();fc='\n\nUploaded dataset preview:\n'+t.split('\n').slice(0,6).join('\n');}catch(e){}}
+  const msg=`Industry: ${industry}\nSkill level: ${level}\nAudience: ${audience}\nBusiness question: ${question}\nData source: ${datasource||'Not specified — recommend best public source'}${fc}`;
+  try{
+    const resp=await fetch('https://dashboard-builder-api.vercel.app/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,system:SYSTEM,messages:[{role:'user',content:msg}]})});
+    const data=await resp.json();
+    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    let cj=raw.replace(/```json|```/g,'').trim();
+    const fb=cj.indexOf('{'),lb=cj.lastIndexOf('}');
+    if(fb>-1&&lb>-1)cj=cj.slice(fb,lb+1);
+    cj=cj.replace(/[\r\n\t]+/g,' ');
+    cj=cj.replace(/,[ ]*}/g,'}').replace(/,[ ]*]/g,']');
+    let bp;
+    try{bp=JSON.parse(cj);}catch(e){
+      let t=cj;
+      const lc=t.lastIndexOf(','),ll=Math.max(t.lastIndexOf(']'),t.lastIndexOf('}'));
+      if(lc>ll)t=t.slice(0,lc);
+      const ob=(t.split('{').length-1)-(t.split('}').length-1);
+      const os=(t.split('[').length-1)-(t.split(']').length-1);
+      if(os>0)t+=']'.repeat(os);
+      if(ob>0)t+='}}'.repeat(ob);
+      t=t.replace(/,[ ]*}/g,'}').replace(/,[ ]*]/g,']');
+      try{bp=JSON.parse(t);}
+      catch(e2){throw new Error('Blueprint generated but could not be parsed. Please try again - this is occasionally caused by complex dataset descriptions.');}
+    }
+    renderBlueprint(bp);
+    document.getElementById('outputStatus').textContent='Blueprint ready';
+  document.getElementById('dlBtn').style.display='inline-flex';
+  window._lastBlueprint=bp;
+  }catch(e){
+    document.getElementById('output').innerHTML=`<div style="background:var(--danger-bg);border:1px solid #fca5a5;border-radius:8px;padding:1rem;font-size:13px;color:var(--danger)">Error: ${e.message}. Please try again.</div>`;
+    document.getElementById('outputStatus').textContent='Error';
+  }
+  document.getElementById('buildBtn').disabled=false;
+}
+
+function clearAll(){
+  ['industry','audience','question','datasource'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('level').value='Beginner';
+  document.getElementById('privacyCheck').checked=false;toggleUpload();
+  document.getElementById('outputStatus').textContent='Waiting for input';
+  document.getElementById('output').innerHTML='<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><h3>Ready to build</h3><p>Fill in the form and click <strong>Build my blueprint</strong>.</p></div>';
+}
+
+const CLRS={red:'#e74c3c',amber:'#f39c12',green:'#27ae60',blue:'#2980b9',teal:'#16a085',orange:'#e67e22',purple:'#8e44ad',grey:'#7f8c8d',gray:'#7f8c8d',navy:'#2c3e50',pink:'#e91e63',cyan:'#00bcd4'};
+function swatchColor(n){const k=n.toLowerCase();for(const[c,v]of Object.entries(CLRS)){if(k.includes(c))return v;}return'#94a3b8';}
+function rClass(r){const v=(r||'').toLowerCase();if(v.includes('real'))return'r-rt';if(v.includes('daily'))return'r-d';if(v.includes('weekly'))return'r-w';return'r-m';}
+function sIcon(s){return s==='PASS'?'✓':s==='WARN'?'!':'✗'}
+function sCls(s){return s==='PASS'?'ci-pass':s==='WARN'?'ci-warn':'ci-fail'}
+
+function renderBlueprint(bp){
+  const pc=(bp.checklist||[]).filter(c=>c.status==='PASS').length;
+  document.getElementById('output').innerHTML=`<div class="blueprint">
+  <div class="bp-header"><div class="bp-title">${bp.title}</div><div class="bp-audience">${bp.audience_summary}</div><div class="bp-question">"${bp.core_question}"</div></div>
+  <div class="bp-section"><div class="bp-section-title">KPI plan — ${bp.kpis.length} metrics</div><table class="kpi-table"><thead><tr><th>Metric</th><th>Definition</th><th>Comparison</th><th>Source</th><th>Unit</th></tr></thead><tbody>${bp.kpis.map(k=>`<tr><td><strong>${k.metric}</strong></td><td>${k.definition}</td><td>${k.comparison}</td><td style="color:var(--text-muted)">${k.source}</td><td><span class="kpi-unit">${k.unit}</span></td></tr>`).join('')}</tbody></table></div>
+  <div class="bp-section"><div class="bp-section-title">Layout plan</div><div class="layout-box">${bp.layout}</div></div>
+  <div class="bp-section"><div class="bp-section-title">Chart specifications</div><div class="chart-cards">${bp.charts.map(c=>`<div class="chart-card"><span class="chart-type-badge">${c.type}</span><div class="chart-info"><div class="chart-title">${c.title}</div><div class="chart-data">${c.data}</div>${c.notes?`<div class="chart-note">${c.notes}</div>`:''}</div></div>`).join('')}</div></div>
+  <div class="bp-section"><div class="bp-section-title">Colour system</div><div class="colour-chips">${(bp.colour_system||[]).map(c=>`<div class="colour-chip"><span class="colour-swatch" style="background:${c.hex||swatchColor(c.colour)}"></span><strong>${c.colour}</strong><span>→ ${c.means}</span></div>`).join('')}</div></div>
+  <div class="bp-section"><div class="bp-section-title">Data requirements</div><table class="data-table"><thead><tr><th>Metric</th><th>Source</th><th>Grain</th><th>Refresh</th></tr></thead><tbody>${(bp.data_requirements||[]).map(d=>`<tr><td><strong>${d.metric}</strong></td><td>${d.source}</td><td>${d.grain}</td><td><span class="refresh-badge ${rClass(d.refresh)}">${d.refresh}</span></td></tr>`).join('')}</tbody></table></div>
+  <div class="bp-section"><div class="bp-section-title">Interactivity plan</div><div style="font-size:13px;color:var(--text);line-height:1.6;padding:10px 12px;background:var(--off-white);border-radius:var(--radius-sm)">${bp.interactivity}</div></div>
+  ${bp.live_api?`<div class="bp-section"><div class="bp-section-title">Recommended live data source</div><div class="api-box"><div class="api-name">${bp.live_api.name}</div><div class="api-why">${bp.live_api.why}</div><div class="api-call">${bp.live_api.sample_call}</div><a class="api-link" href="${bp.live_api.url}" target="_blank">${bp.live_api.url} ↗</a></div></div>`:''}
+  <div class="bp-section"><div class="bp-section-title">Pre-build checklist — ${pc}/${bp.checklist.length} ready</div><div class="checklist">${(bp.checklist||[]).map(c=>`<div class="check-item"><span class="check-icon ${sCls(c.status)}">${sIcon(c.status)}</span><span class="check-text"><strong>${c.item}</strong>${c.note?` — <span class="check-note">${c.note}</span>`:''}</span></div>`).join('')}</div></div>
+  ${bp.anti_patterns_avoided&&bp.anti_patterns_avoided.length?`<div class="bp-section"><div class="bp-section-title">Anti-patterns avoided</div><div class="anti-list">${bp.anti_patterns_avoided.map(a=>`<div class="anti-item"><span class="anti-x">✕</span><span>${a}</span></div>`).join('')}</div></div>`:''}
+  </div>`;
+}
+
+async function fetchWHO(){
+  const btn=document.getElementById('btn-who'),out=document.getElementById('res-who');
+  btn.disabled=true;out.innerHTML='<div class="inline-loading">Fetching from WHO servers...</div>';
+  try{
+    const r=await fetch("https://ghoapi.azureedge.net/api/MALARIA_EST_INCIDENCE?$filter=SpatialDimType eq 'COUNTRY'&$top=10&$orderby=TimeDim desc");
+    const d=await r.json();
+    const rows=(d.value||[]).filter(x=>x.NumericValue).slice(0,8);
+    if(!rows.length)throw new Error('No data');
+    out.innerHTML=`<div class="result-box"><div class="result-label">Malaria estimated incidence — latest records (live)</div><table class="r-table"><thead><tr><th>Country</th><th>Year</th><th>Per 1,000 at risk</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x.SpatialDim}</td><td>${x.TimeDim}</td><td><strong>${(+x.NumericValue).toFixed(1)}</strong></td></tr>`).join('')}</tbody></table><div class="raw-url">API: https://ghoapi.azureedge.net/api/MALARIA_EST_INCIDENCE</div></div>`;
+  }catch(e){
+    out.innerHTML='<div class="inline-err">Browser security (CORS) blocks direct WHO calls from web pages — this is normal. In <strong>Power BI</strong> and <strong>Python</strong> it works perfectly. See the <strong>How to connect data</strong> tab for exact steps.</div>';
+  }
+  btn.disabled=false;
+}
+
+async function fetchFX(){
+  const btn=document.getElementById('btn-fx'),out=document.getElementById('res-fx');
+  btn.disabled=true;out.innerHTML='<div class="inline-loading">Fetching live exchange rates...</div>';
+  try{
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD');
+    const d=await r.json();
+    const curs=['NGN','GBP','EUR','GHS','KES','ZAR','CAD'];
+    const names={NGN:'Nigerian Naira',GBP:'British Pound',EUR:'Euro',GHS:'Ghanaian Cedi',KES:'Kenyan Shilling',ZAR:'South African Rand',CAD:'Canadian Dollar'};
+    const rows=curs.filter(c=>d.rates[c]);
+    out.innerHTML=`<div class="result-box"><div class="result-label">1 USD = ... (live · ${d.date})</div><table class="r-table"><thead><tr><th>Currency</th><th>Name</th><th>Rate</th></tr></thead><tbody>${rows.map(c=>`<tr><td><strong>${c}</strong></td><td style="color:var(--text-muted)">${names[c]}</td><td><strong>${d.rates[c].toLocaleString()}</strong></td></tr>`).join('')}</tbody></table><div class="raw-url">API: https://api.frankfurter.app/latest?from=USD</div></div>`;
+  }catch(e){out.innerHTML=`<div class="inline-err">Error: ${e.message}</div>`;}
+  btn.disabled=false;
+}
+
+async function fetchWB(){
+  const btn=document.getElementById('btn-wb'),out=document.getElementById('res-wb');
+  btn.disabled=true;out.innerHTML='<div class="inline-loading">Fetching Nigeria GDP...</div>';
+  try{
+    const r=await fetch('https://api.worldbank.org/v2/country/NG/indicator/NY.GDP.MKTP.CD?format=json&mrv=10&per_page=10');
+    const d=await r.json();
+    const rows=(d[1]||[]).filter(x=>x.value).slice(0,8);
+    out.innerHTML=`<div class="result-box"><div class="result-label">Nigeria GDP — last 8 years (live · World Bank)</div><table class="r-table"><thead><tr><th>Year</th><th>GDP (USD billions)</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x.date}</td><td><strong>$${(x.value/1e9).toFixed(1)}B</strong></td></tr>`).join('')}</tbody></table><div class="raw-url">API: https://api.worldbank.org/v2/country/NG/indicator/NY.GDP.MKTP.CD?format=json&mrv=10</div></div>`;
+  }catch(e){out.innerHTML=`<div class="inline-err">Error: ${e.message}</div>`;}
+  btn.disabled=false;
+}
+
+async function fetchWeather(){
+  const btn=document.getElementById('btn-wx'),out=document.getElementById('res-wx');
+  btn.disabled=true;out.innerHTML='<div class="inline-loading">Fetching Lagos forecast...</div>';
+  try{
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=6.45&longitude=3.39&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&forecast_days=7&timezone=Africa%2FLagos');
+    const d=await r.json();
+    const days=d.daily.time,maxT=d.daily.temperature_2m_max,minT=d.daily.temperature_2m_min,rain=d.daily.precipitation_sum;
+    const dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    out.innerHTML=`<div class="result-box"><div class="result-label">Lagos 7-day forecast (live · °C)</div><table class="r-table"><thead><tr><th>Date</th><th>Day</th><th>Max °C</th><th>Min °C</th><th>Rain mm</th></tr></thead><tbody>${days.map((date,i)=>`<tr><td>${date}</td><td>${dn[new Date(date).getDay()]}</td><td><strong>${Math.round(maxT[i])}</strong></td><td style="color:var(--text-muted)">${Math.round(minT[i])}</td><td style="${rain[i]>5?'color:var(--blue);font-weight:500':''}">${rain[i].toFixed(1)}</td></tr>`).join('')}</tbody></table><div class="raw-url">API: https://api.open-meteo.com/v1/forecast?latitude=6.45&longitude=3.39&daily=...</div></div>`;
+  }catch(e){out.innerHTML=`<div class="inline-err">Error: ${e.message}</div>`;}
+  btn.disabled=false;
+}
+
+function downloadBlueprint(){
+  if(!window._lastBlueprint)return;
+  const bp=window._lastBlueprint;
+  const lines=[
+    '# '+bp.title,
+    '',
+    '## Audience',
+    bp.audience_summary,
+    '',
+    '## Core question',
+    bp.core_question,
+    '',
+    '## KPI plan',
+    (bp.kpis||[]).map(k=>`- **${k.metric}** (${k.unit}): ${k.definition} | Compare: ${k.comparison} | Source: ${k.source}`).join('\n'),
+    '',
+    '## Layout plan',
+    bp.layout,
+    '',
+    '## Chart specifications',
+    (bp.charts||[]).map((c,i)=>`${i+1}. **${c.title}** [${c.type}] — ${c.data}${c.notes?' ('+c.notes+')':''}`).join('\n'),
+    '',
+    '## Colour system',
+    (bp.colour_system||[]).map(c=>`- ${c.colour}: ${c.means}`).join('\n'),
+    '',
+    '## Data requirements',
+    (bp.data_requirements||[]).map(d=>`- **${d.metric}**: ${d.source} | Grain: ${d.grain} | Refresh: ${d.refresh}`).join('\n'),
+    '',
+    '## Interactivity plan',
+    bp.interactivity,
+    '',
+    '## Recommended live data source',
+    bp.live_api?`**${bp.live_api.name}**: ${bp.live_api.why}\nSample call: ${bp.live_api.sample_call}`:'N/A',
+    '',
+    '## Pre-build checklist',
+    (bp.checklist||[]).map(c=>`- [${c.status==='PASS'?'x':' '}] ${c.item}${c.note?' — '+c.note:''}`).join('\n'),
+    '',
+    '## Anti-patterns avoided',
+    (bp.anti_patterns_avoided||[]).map(a=>`- ${a}`).join('\n'),
+    '',
+    '---',
+    'Generated by Dashboard Blueprint Builder · ibukun-egwuogu.github.io/dashboard-builder-skill',
+  ].join('\n');
+  const blob=new Blob([lines],{type:'text/markdown'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=bp.title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'_blueprint.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+</script>
+</body>
+</html>
