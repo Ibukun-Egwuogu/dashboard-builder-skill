@@ -8,7 +8,7 @@ The proactive companion to the
 Where that skill tells you what went wrong, this one ensures you never make those mistakes
 in the first place.
 
-**Live web app →** https://ibukunegwu.github.io/dashboard-builder-skill/
+**Live web app →** [https://ibukunegwu.github.io/dashboard-builder-skill/](https://ibukun-egwuogu.github.io/dashboard-builder-skill/)
 
 ---
 
